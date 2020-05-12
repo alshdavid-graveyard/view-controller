@@ -1,41 +1,75 @@
-# view-controller
+# View Controller for React
 
-```typescript
+Take advantage of Vue's automatic re-rendering in React
+
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ViewController, Context } from '~/platform/reaction-wheel'
-
-export const MyContext = React.createContext<any>({})
-
-const state = {
-  list: []
-}
+import { ViewController } from 'react-view-controller'
 
 @ViewController()
-class Main extends React.Component<any> {
-  @Context(MyContext, ctx => ctx.list) 
-  private list!: string[]
+class App extends React.Component {
+  private list: string[] = []
+
+  add() {
+    this.list.push('Item')
+  }
 
   render() {
     return <div>
-      <button 
-        onClick={() => this.list.push('hi')}>
-        Hi
+      <button onClick={() => this.add()}>
+        Add
       </button>
-      <button 
-        onClick={() => this.list.pop()}>
-        Bye
-      </button>
-      {this.list.map((item, i) => 
-        <div key={i}>{item}</div>)}
+      <section>
+        {this.list.map(item => <div>{item}</div>)}
+      </section>
     </div>
   }
 }
 
+ReactDOM.render(<App />, document.getElementById('outlet'))
+```
+
+React to changes in objects coming from context
+
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { ViewController } from 'react-view-controller'
+
+export const ItemListContext = React.createContext()
+
+class ItemList {
+  data: string[] = []
+
+  add() {
+    this.data.push('Update')
+  }
+}
+
+@ViewController()
+class Main extends React.Component<any> {
+  @Context(ItemListContext)
+  private itemList!: ItemList
+
+  render() {
+    return <div>
+      <button onClick={() => this.itemList.add()}>
+        Add
+      </button>
+      <section>
+        {this.itemList.data.map(item => <div>{item}</div>)}
+      </section>
+    </div>
+  }
+}
+
+const itemList = new ItemList()
+
 const App = () => (
-  <MyContext.Provider value={state}>
+  <ItemListContext.Provider value={itemList}>
     <Main />
-  </MyContext.Provider>
+  </ItemListContext.Provider>
 )
 
 ReactDOM.render(<App />, document.getElementById('outlet'))
