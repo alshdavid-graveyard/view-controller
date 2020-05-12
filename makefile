@@ -1,0 +1,2 @@
+buid:
+	npx webpack --prod
