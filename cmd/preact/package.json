@@ -1,0 +1,13 @@
+{
+  "name": "preact-view-controller",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "David Alsh",
+  "license": "MIT",
+  "peerDependencies": {
+    "preact": "^10.4.1"
+  },
+  "devDependencies": {
+    "preact": "^10.4.1"
+  }
+}
