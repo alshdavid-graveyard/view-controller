@@ -35,7 +35,7 @@ React to changes in objects coming from context
 ```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { ViewController } from 'react-view-controller'
+import { ViewController, Context, reactiveMirror } from 'react-view-controller'
 
 export const ItemListContext = React.createContext()
 
@@ -65,9 +65,10 @@ class Main extends React.Component<any> {
 }
 
 const itemList = new ItemList()
+const reactiveItemList = reactiveMirror(itemList)
 
 const App = () => (
-  <ItemListContext.Provider value={itemList}>
+  <ItemListContext.Provider value={reactiveItemList}>
     <Main />
   </ItemListContext.Provider>
 )

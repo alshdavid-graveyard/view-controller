@@ -11,14 +11,17 @@ const methodsToPatch = [
   'reverse'
 ]
 
-export type ProxySubscriber<T = any> = (
-  T & emitter.Emitter<void>
+export type ProxySubscriber<T> = (
+  T & 
+  {
+    _onchange: (cb: () => Promise<any>) => emitter.Subscription
+  }
 )
 
-export function create<T = any>(source: T): ProxySubscriber<T> {
+export function create<T>(source: T): ProxySubscriber<T> {
   const update$ = emitter.create<void>()
   const proxy = observe(source, update$)
-  proxy.subscribe = update$.subscribe.bind(update$)
+  proxy._onchange = update$.subscribe.bind(update$)
   return proxy
 }
 

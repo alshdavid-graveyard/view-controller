@@ -87,9 +87,6 @@ const preact = {
     ]
   },
   plugins: [
-    args.stats && new BundleAnalyzerPlugin({
-      analyzerPort: 8889
-    }),
     new EventHooksPlugin({
       afterEmit: () => fs.copyFileSync(
         path.join(__dirname, 'cmd', 'preact', 'package.json'),
@@ -122,7 +119,6 @@ const react = {
     ]
   },
   plugins: [
-    args.stats && new BundleAnalyzerPlugin(),
     new EventHooksPlugin({
       afterEmit: () => fs.copyFileSync(
         path.join(__dirname, 'cmd', 'react', 'package.json'),
@@ -154,6 +150,14 @@ if (args.packages.length == 0) {
   for (const package of args.packages) {
     tasks.push(packages[package])
   }
+}
+
+if (args.stats) {
+  tasks.forEach((task, i) => {
+    task.plugins.push(new BundleAnalyzerPlugin({
+      analyzerPort: 8888 + i
+    }))
+  })
 }
 
 module.exports = tasks
